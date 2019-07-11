@@ -50,7 +50,7 @@ class FSFieldsCompletionProvider : CompletionProvider<CompletionParameters>() {
         val instance: FSFieldsCompletionProvider = FSFieldsCompletionProvider()
     }
 
-    override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext?, result: CompletionResultSet) {
+    override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
         val project = getProject(parameters) ?: return
         val psiElementUnderCaret = parameters.originalPosition ?: parameters.position
 

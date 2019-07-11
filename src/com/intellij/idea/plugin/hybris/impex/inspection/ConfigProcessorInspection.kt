@@ -29,7 +29,7 @@ import com.intellij.idea.plugin.hybris.impex.psi.ImpexTypes
 import com.intellij.idea.plugin.hybris.impex.psi.ImpexVisitor
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.PsiSearchHelper.SERVICE.getInstance
+import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.UsageSearchContext
 import com.intellij.psi.util.PsiTreeUtil
 
@@ -54,7 +54,7 @@ private class ConfigProcessorVisitor(private val problemsHolder: ProblemsHolder)
             if (prevLeaf != null && prevLeaf.text.contains("\$config")) {
                 val file = prevLeaf.containingFile
                 var isExist = false
-                getInstance(prevLeaf.project)
+                PsiSearchHelper.getInstance(prevLeaf.project)
                         .processElementsWithWord({ element, _ ->
                             if (element.node.elementType != ImpexParserDefinition.FILE &&
                                     element.node.elementType != ImpexTypes.COMMENT_BODY) {

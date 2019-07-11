@@ -35,9 +35,7 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import javax.swing.Icon
-import com.intellij.codeInsight.lookup.LookupElement
-import com.intellij.codeInsight.completion.InsertHandler
-
+import com.intellij.util.ProcessingContext
 
 
 /**
@@ -52,7 +50,8 @@ object FSKeywordTableClauseAnalyzer {
         }
         if ((isColumnReferenceIdentifier(parameters) && parameters.position.skipWhitespaceSiblingsBackward() != null && parameters.position.skipWhitespaceSiblingsBackward()!!.text != "}") ||
                 (isColumnReferenceIdentifier(parameters) && PsiTreeUtil.getParentOfType(parameters.position, FlexibleSearchSelectList::class.java) != null)) {
-            FSFieldsCompletionProvider.instance.addCompletionVariants(parameters, null, completionResultSet)
+            val processingContext = ProcessingContext()
+            FSFieldsCompletionProvider.instance.addCompletionVariants(parameters, processingContext, completionResultSet)
             
         }
         if (isFile(parameters)) {
