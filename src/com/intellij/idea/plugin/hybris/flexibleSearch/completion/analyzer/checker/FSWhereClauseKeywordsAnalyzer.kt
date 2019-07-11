@@ -42,8 +42,7 @@ object FSWhereClauseKeywordsAnalyzer {
         val context = parameters.originalPosition ?: parameters.position
 
         if (isColumnReferenceIdentifier(parameters)) {
-            val processingContext = ProcessingContext()
-            FSFieldsCompletionProvider.instance.addCompletionVariants(parameters, processingContext, completionResultSet)
+            FSFieldsCompletionProvider.instance.addCompletionVariants(parameters, ProcessingContext(), completionResultSet)
         }
 
         if (context.parent != null && PsiTreeUtil.getParentOfType(parameters.position.parent, FlexibleSearchWhereClause::class.java) != null) {
