@@ -53,6 +53,10 @@
         <component>
             <implementation-class>com.intellij.idea.plugin.hybris.tools.remote.http.HybrisHacHttpClient</implementation-class>
         </component>
+        <component>
+            <interface-class>com.intellij.idea.plugin.hybris.tools.remote.http.SolrHttpClient</interface-class>
+            <implementation-class>com.intellij.idea.plugin.hybris.tools.remote.http.solr.SolrHttpClientImpl</implementation-class>
+        </component>
     </project-components>
 
     <actions>

@@ -36,6 +36,7 @@ public interface HybrisConstants {
 
     String IMPEX_CONSOLE_TITLE = "Hybris Impex Console";
     String IMPEX_MONITOR_CONSOLE_TITLE = "Hybris Monitor Console";
+    String SOLR_CONSOLE_TITLE = "Solr Monitor Console";
     String GROOVY_CONSOLE_TITLE = "Hybris Groovy Console";
     String FLEXIBLE_SEARCH_CONSOLE_TITLE = "Hybris FS Console";
     String EXTENSION_INFO_XML = "extensioninfo.xml";

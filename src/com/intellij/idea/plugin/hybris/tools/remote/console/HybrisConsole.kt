@@ -3,10 +3,12 @@ package com.intellij.idea.plugin.hybris.tools.remote.console
 import com.intellij.execution.console.ConsoleHistoryController
 import com.intellij.execution.console.ConsoleRootType
 import com.intellij.execution.console.LanguageConsoleImpl
+import com.intellij.execution.ui.ConsoleViewContentType
 import com.intellij.idea.plugin.hybris.common.HybrisConstants
 import com.intellij.idea.plugin.hybris.common.HybrisConstants.*
 import com.intellij.idea.plugin.hybris.common.HybrisConstants.IMPEX.CATALOG_VERSION_ONLINE
 import com.intellij.idea.plugin.hybris.common.HybrisConstants.IMPEX.CATALOG_VERSION_STAGED
+import com.intellij.idea.plugin.hybris.flexibleSearch.FlexibleSearchLanguage
 import com.intellij.idea.plugin.hybris.impex.ImpexLanguage
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettingsComponent
 import com.intellij.idea.plugin.hybris.settings.HybrisRemoteConnectionSettings
@@ -14,10 +16,13 @@ import com.intellij.idea.plugin.hybris.statistics.StatsCollector
 import com.intellij.idea.plugin.hybris.tools.remote.console.preprocess.HybrisConsolePreProcessor
 import com.intellij.idea.plugin.hybris.tools.remote.console.preprocess.HybrisConsolePreProcessorCatalogVersion
 import com.intellij.idea.plugin.hybris.tools.remote.http.HybrisHacHttpClient
+import com.intellij.idea.plugin.hybris.tools.remote.http.SolrHttpClient
 import com.intellij.idea.plugin.hybris.tools.remote.http.impex.HybrisHttpResult
 import com.intellij.idea.plugin.hybris.tools.remote.http.monitorImpexFiles
+import com.intellij.idea.plugin.hybris.tools.remote.http.solr.SolrQueryObject
 import com.intellij.lang.Language
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.fileTypes.PlainTextLanguage
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.util.io.FileUtil.toCanonicalPath
@@ -27,15 +32,12 @@ import com.intellij.ui.components.JBLabel
 import org.apache.batik.ext.swing.GridBagConstants
 import org.apache.commons.lang.StringUtils
 import org.jetbrains.plugins.groovy.GroovyLanguage
-import java.awt.BorderLayout
-import java.awt.FlowLayout
-import java.awt.GridBagConstraints
-import java.awt.GridBagLayout
+import java.awt.*
 import java.io.File
 import java.util.concurrent.TimeUnit
-import javax.swing.JList
-import javax.swing.JPanel
+import javax.swing.*
 import javax.swing.border.EmptyBorder
+import kotlin.jvm.internal.Intrinsics
 
 /**
  * @author Nosov Aleksandr <nosovae.dev@gmail.com>
@@ -137,6 +139,44 @@ class HybrisImpexConsole(project: Project) : HybrisConsole(project, IMPEX_CONSOL
     }
 }
 
+class HybrisFSConsole(project: Project) : HybrisConsole(project, FLEXIBLE_SEARCH_CONSOLE_TITLE, FlexibleSearchLanguage.getInstance()) {
+
+    private val commitCheckbox = JBCheckBox()
+    private val commitLabel = JBLabel("Commit mode: ")
+    private val isPlainSQLCheckbox = JBCheckBox()
+    private val isPlainSQLLabel = JBLabel("SQL: ")
+    private val jSpinner = JSpinner(SpinnerNumberModel(10, 0, 1000, 1) as SpinnerModel)
+    private val panel = JPanel(FlowLayout(FlowLayout.LEFT, 0, 0))
+
+    override fun execute(query: String): HybrisHttpResult {
+        return HybrisHacHttpClient.getInstance(project).executeFlexibleSearch(project, commitCheckbox.isSelected, isPlainSQLCheckbox.isSelected, jSpinner.value.toString(), query)
+    }
+
+    override fun collectStatistics() {
+        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.FLEXIBLE_SEARCH_CONSOLE)
+    }
+    object MyConsoleRootType : ConsoleRootType("hybris.fs.shell", null)
+
+    private fun createUI(){
+        commitLabel.border = EmptyBorder(0, 10, 0, 3)
+        commitCheckbox.border = EmptyBorder(0, 0, 0, 5)
+        panel.add(commitLabel)
+        panel.add(commitCheckbox)
+        isPlainSQLLabel.border = EmptyBorder(0, 10, 0, 3)
+        isPlainSQLCheckbox.border = EmptyBorder(0, 0, 0, 5)
+        panel.add(isPlainSQLLabel)
+        panel.add(isPlainSQLCheckbox)
+        panel.add(jSpinner)
+        add(panel, BorderLayout.NORTH)
+        isEditable = true
+    }
+
+    init {
+        createUI()
+        ConsoleHistoryController(MyConsoleRootType, "hybris.fs.shell", this).install()
+    }
+}
+
 class HybrisGroovyConsole(project: Project) : HybrisConsole(project, GROOVY_CONSOLE_TITLE, GroovyLanguage) {
     override fun collectStatistics() {
         StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.GROOVY_CONSOLE)
@@ -223,6 +263,71 @@ class HybrisImpexMonitorConsole(project: Project) : HybrisConsole(project, IMPEX
 
     override fun execute(query: String): HybrisHttpResult {
         return monitorImpexFiles(timeOption().value, timeOption().unit, workingDir())
+    }
+}
+
+class HybrisSolrConsole(project: Project) : HybrisConsole(project, SOLR_CONSOLE_TITLE, PlainTextLanguage.INSTANCE), SolrConsole  {
+    override val coresComboBox = ComboBox(SolrHttpClient.getInstance(project).listOfCores(project), 300)
+    private val jPanel = JPanel(FlowLayout(0, 0, 0))
+    private val rowsLabel = JBLabel("Rows:")
+    private val jSpinner = JSpinner(SpinnerNumberModel(10, 0, 1000, 1))
+    private val availableCoresLabel = JBLabel("Available cores one")
+
+    private fun createUI() {
+        availableCoresLabel.border = EmptyBorder(0, 10, 0, 5)
+        jPanel.add(availableCoresLabel)
+        jPanel.add(coresComboBox)
+        rowsLabel.border = EmptyBorder(0, 10, 0, 0)
+        jPanel.add(rowsLabel)
+        jPanel.add(jSpinner)
+        add(jPanel, "North")
+        prompt = " q="
+        setPromptAttributes(ConsoleViewContentType.LOG_INFO_OUTPUT)
+        Intrinsics.checkExpressionValueIsNotNull(consoleEditor, "consoleEditor")
+        consoleEditor.isOneLineMode = true
+    }
+
+    init {
+        Intrinsics.checkParameterIsNotNull(project, "project")
+        val plainTextLanguage = PlainTextLanguage.INSTANCE
+        Intrinsics.checkExpressionValueIsNotNull(plainTextLanguage, "PlainTextLanguage.INSTANCE")
+        createUI()
+        ConsoleHistoryController(MyConsoleRootType, "hybris.impex.shell", this).install()
+    }
+
+    override fun printDefaultText() {
+        this.setInputText("*:*")
+    }
+
+    override fun collectStatistics() {
+        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.SOLR_CONSOLE)
+    }
+
+    object MyConsoleRootType : ConsoleRootType("hybris.solr.shell", null)
+
+    override fun execute(query: String): HybrisHttpResult {
+
+        Intrinsics.checkParameterIsNotNull(project, "query")
+        if (this.coresComboBox.selectedItem != null) {
+            val selectedCore = this.coresComboBox.selectedItem
+            if (selectedCore == null) {
+                throw TypeCastException("null cannot be cast to non-null type kotlin.String")
+            } else {
+                val selectedCoreString = selectedCore as String
+                val spinnerValue = jSpinner.value
+                if (spinnerValue == null) {
+                    throw TypeCastException("null cannot be cast to non-null type kotlin.Int")
+                } else {
+                    val solrQueryObject = SolrQueryObject(query, selectedCoreString, spinnerValue as Int)
+                    val client = SolrHttpClient.getInstance(project)
+                    return client.executeSolrQuery(project, solrQueryObject)
+                }
+            }
+        } else {
+            val hybrisHttpResult = HybrisHttpResult.HybrisHttpResultBuilder.createResult().errorMessage("Cannot connect to a Solr server. Please, check your configuration").httpCode(500).build()
+            Intrinsics.checkExpressionValueIsNotNull(hybrisHttpResult, "HybrisHttpResult.HybrisH…\n                .build()")
+            return hybrisHttpResult
+        }
     }
 }
 

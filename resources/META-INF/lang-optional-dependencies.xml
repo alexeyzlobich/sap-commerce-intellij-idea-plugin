@@ -319,6 +319,17 @@
             <add-to-group group-id="CodeMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
+        <group id="FSRemoteControl.Actions" text="FlexibleSearch Remote Control" popup="true" icon="/icons/hybrisIcon.svg">
+            <action id="FSRemoteControl.Execute"
+                    class="com.intellij.idea.plugin.hybris.tools.remote.action.ExecuteFlexibleSearchAction"
+                    text="Execute selected FlexibleSearch Statement"
+                    icon="/icons/hybrisIcon.svg"
+                    description="Execute FlexibleSearch file via remote hybris instance">
+            </action>
+
+            <add-to-group group-id="CodeMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
 
         <group id="FSRemoteControl.Actions" text="FlexibleSearch Remote Control" popup="true" icon="/icons/hybrisIcon.svg">
             <action id="FSRemoteControl.Execute"
