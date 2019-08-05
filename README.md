@@ -3,7 +3,6 @@
 ## Licence ##
 [GNU Lesser General Public License 3.0](http://www.gnu.org/licenses/)
 
-Copyright (C) 2014-2016 Alexander Bartash <AlexanderBartash@gmail.com> 
 Copyright (C) 2019 EPAM Systems <hybrisideaplugin@epam.com>
 
 This program is free software: you can redistribute it and/or modify
@@ -32,3 +31,30 @@ This plugin provides [SAP Commerce](https://www.sap.com/products/crm/e-commerce-
 * Be sure to include into your pull request and all commit messages the following line: "Signed-off-by: Your Real Name your.email@email.com" otherwise it can not be accepted. Use your real name (sorry, no pseudonyms or anonymous contributions).
 * For additional questions you can send an [email](mailto:hybrisideaplugin@epam.com).
 
+### Contributors and Developers
+
+This project exists thanks to all the people who contribute.
+
+* Alexander Bartash
+* Vlad Bozhenok
+* Martin Zdarsky-Jones
+* Alexander Nosov
+* Eugene Kudelevsky
+* Cristian Caprar
+* Daniel Carter
+* Oleksandr Mishchuk
+* Michael Golubev
+* Nicko Cadell
+* Dan Wanigasekera
+* Markus Priegl
+* Sergei Aksenenko
+* Roger Ye
+* Hector Longarte
+* Fabian Necci
+* Markus Perndorfer
+* FAIR Consulting Group
+* Mykyta Kostiuk
+* Dmytro Lytvynenko
+* Oleksandr Shkurat
+* Maxim Bilohay
+* Eugene Koryakin
