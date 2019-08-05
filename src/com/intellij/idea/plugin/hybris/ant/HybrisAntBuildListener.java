@@ -23,7 +23,6 @@ import com.intellij.idea.plugin.hybris.common.HybrisConstants;
 import com.intellij.idea.plugin.hybris.project.actions.ProjectRefreshAction;
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettings;
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettingsComponent;
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector;
 import com.intellij.lang.ant.config.AntBuildFileBase;
 import com.intellij.lang.ant.config.AntBuildListener;
 import com.intellij.lang.ant.config.AntConfigurationBase;
@@ -86,7 +85,6 @@ public class HybrisAntBuildListener implements AntExecutionListener {
     public void buildFinished(final AntFinishedExecutionEvent event) {
         final Map<Project, AntGenResult> resultMap = new HashMap<>();
         findAntResult(resultMap);
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.ANT);
         processNewExtensions(resultMap);
         triggerNextAction();
     }

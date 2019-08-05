@@ -29,10 +29,8 @@ import com.intellij.idea.plugin.hybris.common.services.NotificationService;
 import com.intellij.idea.plugin.hybris.common.services.impl.DefaultNotificationService;
 import com.intellij.idea.plugin.hybris.common.utils.HybrisIcons;
 import com.intellij.idea.plugin.hybris.project.actions.ProjectRefreshAction;
-import com.intellij.idea.plugin.hybris.project.wizard.PermissionToSendStatisticsDialog;
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettings;
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettingsComponent;
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
@@ -118,9 +116,7 @@ public class HybrisProjectManagerListener implements ProjectManagerListener, Dis
 
             logVersion(project);
 
-            if (popupPermissionToSendStatistics(project)) {
-                continueOpening(project);
-            }
+            continueOpening(project);
         });
     }
 
@@ -169,19 +165,6 @@ public class HybrisProjectManagerListener implements ProjectManagerListener, Dis
         });
     }
 
-    private boolean popupPermissionToSendStatistics(final Project project) {
-        final CommonIdeaService commonIdeaService = ServiceManager.getService(CommonIdeaService.class);
-        if (commonIdeaService.shouldShowPermissionToSendStatisticsDialog()) {
-            EventQueue.invokeLater(() -> {
-                if (new PermissionToSendStatisticsDialog(project).showAndGet()) {
-                    continueOpening(project);
-                }
-            });
-            return false;
-        }
-        return true;
-    }
-
     private void resetSpringGeneralSettings(final Project project) {
         final CommonIdeaService commonIdeaService = ServiceManager.getService(CommonIdeaService.class);
         if (commonIdeaService.isHybrisProject(project)) {
@@ -204,16 +187,10 @@ public class HybrisProjectManagerListener implements ProjectManagerListener, Dis
 
     private boolean isOldHybrisProject(final Project project) {
         final CommonIdeaService commonIdeaService = ServiceManager.getService(CommonIdeaService.class);
-        final StatsCollector statsCollector = StatsCollector.getInstance();
         if (commonIdeaService.isHybrisProject(project)) {
-            statsCollector.collectStat(StatsCollector.ACTIONS.OPEN_PROJECT);
             return commonIdeaService.isOutDatedHybrisProject(project);
         } else {
-            final boolean potential = commonIdeaService.isPotentiallyHybrisProject(project);
-            if (potential) {
-                statsCollector.collectStat(StatsCollector.ACTIONS.OPEN_POTENTIAL_PROJECT);
-            }
-            return potential;
+            return commonIdeaService.isPotentiallyHybrisProject(project);
         }
     }
 

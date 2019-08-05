@@ -30,7 +30,6 @@ import com.intellij.idea.plugin.hybris.settings.HybrisDeveloperSpecificProjectSe
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettings;
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettingsComponent;
 import com.intellij.idea.plugin.hybris.settings.HybrisRemoteConnectionSettings;
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.EditorBundle;
@@ -168,15 +167,6 @@ public class DefaultCommonIdeaService implements CommonIdeaService {
             .filter(e -> e instanceof PlatformHybrisModuleDescriptor)
             .findAny()
             .orElse(null);
-    }
-
-    @Override
-    public boolean shouldShowPermissionToSendStatisticsDialog() {
-        final HybrisApplicationSettings settings = HybrisApplicationSettingsComponent.getInstance().getState();
-        if (StatsCollector.getInstance().isOpenCollectiveContributor()) {
-            return !settings.isAllowedSendingPlainStatistics() && !settings.isDisallowedSendingStatistics();
-        }
-        return !settings.isAllowedSendingPlainStatistics() && !settings.isDevelopmentMode();
     }
 
     @Override

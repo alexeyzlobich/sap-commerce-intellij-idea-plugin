@@ -34,7 +34,6 @@ import com.intellij.idea.plugin.hybris.project.descriptors.MavenModuleDescriptor
 import com.intellij.idea.plugin.hybris.project.descriptors.RootModuleDescriptor;
 import com.intellij.idea.plugin.hybris.project.tasks.ImportProjectProgressModalWindow;
 import com.intellij.idea.plugin.hybris.project.tasks.SearchModulesRootsTaskModalWindow;
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
@@ -193,7 +192,6 @@ public class DefaultHybrisProjectImportBuilder extends AbstractHybrisProjectImpo
         final ConfiguratorFactory configuratorFactory = this.getConfiguratorFactory();
 
         this.performProjectsCleanup(allModules);
-        this.collectStatistics(hybrisProjectDescriptor);
 
         new ImportProjectProgressModalWindow(
             project, model, configuratorFactory, hybrisProjectDescriptor, modules
@@ -305,26 +303,6 @@ public class DefaultHybrisProjectImportBuilder extends AbstractHybrisProjectImpo
         ).notify(project);
 
         showSystemNotificationIfNotActive(project, notificationName, notificationTitle, notificationName);
-    }
-
-    private void collectStatistics(final HybrisProjectDescriptor hybrisProjectDescriptor) {
-        try {
-            final StringBuilder parameters = new StringBuilder();
-            parameters.append("readOnly:");
-            parameters.append(hybrisProjectDescriptor.isImportOotbModulesInReadOnlyMode());
-            parameters.append(",customDirectoryOverride:");
-
-            final boolean override = hybrisProjectDescriptor.getExternalExtensionsDirectory() != null;
-            parameters.append(override);
-
-            final boolean hasSources = hybrisProjectDescriptor.getSourceCodeFile() != null;
-            parameters.append(",hasSources:");
-            parameters.append(hasSources);
-
-            StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.IMPORT_PROJECT, parameters.toString());
-        } catch (Exception e) {
-            // we do not care
-        }
     }
 
     protected void performProjectsCleanup(@NotNull final Iterable<HybrisModuleDescriptor> modulesChosenForImport) {

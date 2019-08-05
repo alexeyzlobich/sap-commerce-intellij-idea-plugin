@@ -17,9 +17,5 @@
     </extensions>
 
     <application-components>
-        <component>
-            <interface-class>com.intellij.idea.plugin.hybris.statistics.StatsCollector</interface-class>
-            <implementation-class>com.intellij.idea.plugin.hybris.statistics.impl.DefaultStatsCollector</implementation-class>
-        </component>
     </application-components>
 </idea-plugin>

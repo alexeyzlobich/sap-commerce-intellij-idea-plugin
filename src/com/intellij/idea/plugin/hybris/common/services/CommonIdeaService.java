@@ -57,8 +57,6 @@ public interface CommonIdeaService {
         return ServiceManager.getService(CommonIdeaService.class);
     }
 
-    boolean shouldShowPermissionToSendStatisticsDialog();
-
     String getHostHacUrl(@NotNull Project project);
 
     String getHostHacUrl(@NotNull final Project project, @Nullable HybrisRemoteConnectionSettings mySettings);
