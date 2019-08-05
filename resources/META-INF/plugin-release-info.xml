@@ -1,15 +1,15 @@
 <idea-plugin>
 
     <id>ccom.intellij.idea.plugin.hybris.impex</id>
-    <name>hybris integration</name>
-    <version>10.5.1</version>
+    <name>SAP Commerce Developers Toolset</name>
+    <version>1908</version>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
     <idea-version since-build="191"/>
 
-    <vendor email="AlexanderBartash@gmail.com"
-            url="https://hybris-integration.atlassian.net/wiki/display/IIPPS/Intellij+IDEA+Plugin+Public+Space">
-        Alexander Bartash
+    <vendor email="hybrisideaplugin@epam.com"
+            url="https://github.com/epam/sap-commerce-intellij-idea-plugin">
+        EPAM Systems
     </vendor>
 
     <description>
