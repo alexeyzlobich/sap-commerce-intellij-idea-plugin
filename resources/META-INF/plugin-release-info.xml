@@ -1,6 +1,6 @@
 <idea-plugin>
 
-    <id>ccom.intellij.idea.plugin.hybris.impex</id>
+    <id>com.intellij.idea.plugin.sap.commerce</id>
     <name>SAP Commerce Developers Toolset</name>
     <version>1908</version>
 
