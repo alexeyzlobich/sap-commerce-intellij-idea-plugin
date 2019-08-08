@@ -20,7 +20,6 @@ package com.intellij.idea.plugin.hybris.settings;
 
 import com.google.common.collect.Lists;
 import com.intellij.ide.util.PropertyName;
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -103,9 +102,6 @@ public class HybrisApplicationSettings {
 
     @PropertyName("defaultPlatformInReadOnly")
     private boolean defaultPlatformInReadOnly = true;
-
-    @PropertyName("usedActions")
-    private HashSet<StatsCollector.ACTIONS> usedActions = new HashSet<>();
 
     @PropertyName("followSymlink")
     private boolean followSymlink = true;
@@ -245,14 +241,6 @@ public class HybrisApplicationSettings {
         this.warnIfGeneratedItemsAreOutOfDate = warnIfGeneratedItemsAreOutOfDate;
     }
 
-    public HashSet<StatsCollector.ACTIONS> getUsedActions() {
-        return usedActions;
-    }
-
-    public void setUsedActions(final HashSet<StatsCollector.ACTIONS> usedActions) {
-        this.usedActions = usedActions;
-    }
-
     public boolean isFollowSymlink() {
         return followSymlink;
     }
@@ -357,7 +345,6 @@ public class HybrisApplicationSettings {
             .append(groupPlatform)
             .append(hideEmptyMiddleFolders)
             .append(defaultPlatformInReadOnly)
-            .append(usedActions)
             .append(followSymlink)
             .append(scanThroughExternalModule)
             .append(allowedSendingPlainStatistics)
@@ -398,7 +385,6 @@ public class HybrisApplicationSettings {
             .append(groupPlatform, other.groupPlatform)
             .append(hideEmptyMiddleFolders, other.hideEmptyMiddleFolders)
             .append(defaultPlatformInReadOnly, other.defaultPlatformInReadOnly)
-            .append(usedActions, other.usedActions)
             .append(followSymlink, other.followSymlink)
             .append(scanThroughExternalModule, other.scanThroughExternalModule)
             .append(allowedSendingPlainStatistics, other.allowedSendingPlainStatistics)
@@ -430,7 +416,6 @@ public class HybrisApplicationSettings {
         sb.append(", groupPlatform='").append(groupPlatform).append('\'');
         sb.append(", hideEmptyMiddleFolders='").append(hideEmptyMiddleFolders).append('\'');
         sb.append(", defaultPlatformInReadOnly='").append(defaultPlatformInReadOnly).append('\'');
-        sb.append(", usedActions='").append(usedActions).append('\'');
         sb.append(", followSymlink='").append(followSymlink).append('\'');
         sb.append(", scanThroughExternalModule='").append(scanThroughExternalModule).append('\'');
         sb.append(", allowedSendingPlainStatistics='").append(allowedSendingPlainStatistics).append('\'');

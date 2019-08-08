@@ -20,7 +20,6 @@ package com.intellij.idea.plugin.hybris.moduleDiagram;
 
 import com.intellij.diagram.DiagramProvider;
 import com.intellij.idea.plugin.hybris.actions.ActionUtils;
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.uml.core.actions.ShowDiagram;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +42,6 @@ public class ShowModuleDependencyDiagramAction extends ShowDiagram {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.DEPENDENCY_DIAGRAM);
         super.actionPerformed(e);
     }
 }

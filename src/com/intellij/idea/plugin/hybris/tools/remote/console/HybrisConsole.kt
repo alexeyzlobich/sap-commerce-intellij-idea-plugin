@@ -12,7 +12,6 @@ import com.intellij.idea.plugin.hybris.flexibleSearch.FlexibleSearchLanguage
 import com.intellij.idea.plugin.hybris.impex.ImpexLanguage
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettingsComponent
 import com.intellij.idea.plugin.hybris.settings.HybrisRemoteConnectionSettings
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector
 import com.intellij.idea.plugin.hybris.tools.remote.console.preprocess.HybrisConsolePreProcessor
 import com.intellij.idea.plugin.hybris.tools.remote.console.preprocess.HybrisConsolePreProcessorCatalogVersion
 import com.intellij.idea.plugin.hybris.tools.remote.http.HybrisHacHttpClient
@@ -58,14 +57,9 @@ abstract class HybrisConsole(project: Project, title: String, language: Language
     open fun connectionType(): HybrisRemoteConnectionSettings.Type {
         return HybrisRemoteConnectionSettings.Type.Hybris
     }
-
-    abstract fun collectStatistics()
 }
 
 class HybrisImpexConsole(project: Project) : HybrisConsole(project, IMPEX_CONSOLE_TITLE, ImpexLanguage.getInstance()) {
-    override fun collectStatistics() {
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.IMPEX_CONSOLE)
-    }
 
     object MyConsoleRootType : ConsoleRootType("hybris.impex.shell", null)
 
@@ -152,9 +146,6 @@ class HybrisFSConsole(project: Project) : HybrisConsole(project, FLEXIBLE_SEARCH
         return HybrisHacHttpClient.getInstance(project).executeFlexibleSearch(project, commitCheckbox.isSelected, isPlainSQLCheckbox.isSelected, jSpinner.value.toString(), query)
     }
 
-    override fun collectStatistics() {
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.FLEXIBLE_SEARCH_CONSOLE)
-    }
     object MyConsoleRootType : ConsoleRootType("hybris.fs.shell", null)
 
     private fun createUI(){
@@ -178,9 +169,6 @@ class HybrisFSConsole(project: Project) : HybrisConsole(project, FLEXIBLE_SEARCH
 }
 
 class HybrisGroovyConsole(project: Project) : HybrisConsole(project, GROOVY_CONSOLE_TITLE, GroovyLanguage) {
-    override fun collectStatistics() {
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.GROOVY_CONSOLE)
-    }
 
     object MyConsoleRootType : ConsoleRootType("hybris.groovy.shell", null)
 
@@ -209,9 +197,6 @@ class HybrisGroovyConsole(project: Project) : HybrisConsole(project, GROOVY_CONS
 
 
 class HybrisImpexMonitorConsole(project: Project) : HybrisConsole(project, IMPEX_MONITOR_CONSOLE_TITLE, ImpexLanguage.getInstance()) {
-    override fun collectStatistics() {
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.IMPEX_MONITOR)
-    }
 
     object MyConsoleRootType : ConsoleRootType("hybris.impex.monitor.shell", null)
 
@@ -297,10 +282,6 @@ class HybrisSolrConsole(project: Project) : HybrisConsole(project, SOLR_CONSOLE_
 
     override fun printDefaultText() {
         this.setInputText("*:*")
-    }
-
-    override fun collectStatistics() {
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.SOLR_CONSOLE)
     }
 
     object MyConsoleRootType : ConsoleRootType("hybris.solr.shell", null)

@@ -33,7 +33,6 @@ import com.intellij.idea.plugin.hybris.project.HybrisProjectImportProvider;
 import com.intellij.idea.plugin.hybris.project.wizard.NonGuiSupport;
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettings;
 import com.intellij.idea.plugin.hybris.settings.HybrisProjectSettingsComponent;
-import com.intellij.idea.plugin.hybris.statistics.StatsCollector;
 import com.intellij.lang.ant.config.AntBuildFile;
 import com.intellij.lang.ant.config.AntConfigurationBase;
 import com.intellij.openapi.actionSystem.ActionPlaces;
@@ -95,7 +94,6 @@ public class ProjectRefreshAction extends AnAction {
         removeOldProjectData(project);
 
         try {
-            collectStatistics();
             final AddModuleWizard wizard = getWizard(project);
             final ProjectBuilder projectBuilder = wizard.getProjectBuilder();
 
@@ -154,10 +152,6 @@ public class ProjectRefreshAction extends AnAction {
     @Override
     public boolean isDumbAware() {
         return true;
-    }
-
-    private void collectStatistics() {
-        StatsCollector.getInstance().collectStat(StatsCollector.ACTIONS.REFRESH_PROJECT);
     }
 
     private AddModuleWizard getWizard(final Project project) throws ConfigurationException {

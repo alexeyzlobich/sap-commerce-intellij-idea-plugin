@@ -99,7 +99,6 @@ class HybrisConsoleExecuteValidateActionHandler(private val project: Project,
     private fun execute(console: HybrisConsole,
                         consoleHistoryController: ConsoleHistoryController) {
 
-        console.collectStatistics();
         // Process input and add to history
         val document = console.currentEditor.document
 
