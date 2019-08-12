@@ -64,7 +64,6 @@ dependencies {
     compile project("rt-ant")
 }
 
-
 //noinspection GroovyAssignabilityCheck
 task addPsiViewerPlugin {
     def majorIntellijVersion = (intelijVersion as String).split("\\.").first()
