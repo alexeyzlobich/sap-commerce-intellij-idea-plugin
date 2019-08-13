@@ -105,10 +105,6 @@ public class HybrisProjectManagerListener implements ProjectManagerListener, Dis
                 );
             }
 
-            this.showImportantInfoNotificationWithCloseTimeoutIfItWasNotShownThisMonth(
-                project, "support.us.step.title", "support.us.step.text"
-            );
-
             final CommonIdeaService commonIdeaService = ServiceManager.getService(CommonIdeaService.class);
             if (!commonIdeaService.isHybrisProject(project)) {
                 return;
