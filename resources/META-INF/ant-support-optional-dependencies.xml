@@ -21,7 +21,7 @@
 -->
 <idea-plugin>
 
-    <extensions defaultExtensionNs="com.intellij">
+<!--    <extensions defaultExtensionNs="com.intellij">
 
         <applicationService serviceInterface="com.intellij.idea.plugin.hybris.project.configurators.AntConfigurator"
                             serviceImplementation="com.intellij.idea.plugin.hybris.project.configurators.impl.DefaultAntConfigurator"/>
@@ -32,6 +32,6 @@
         <component>
             <implementation-class>com.intellij.idea.plugin.hybris.ant.AntTreeUpdatingHack</implementation-class>
         </component>
-    </project-components>
+    </project-components>-->
 
 </idea-plugin>

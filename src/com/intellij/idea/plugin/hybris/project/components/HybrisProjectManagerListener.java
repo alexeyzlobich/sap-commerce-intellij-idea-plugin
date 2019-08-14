@@ -180,7 +180,7 @@ public class HybrisProjectManagerListener implements ProjectManagerListener, Dis
         final CommonIdeaService commonIdeaService = ServiceManager.getService(CommonIdeaService.class);
         if (commonIdeaService.isHybrisProject(project)) {
             if (isPluginActive(ANT_SUPPORT_PLUGIN_ID)) {
-                HybrisAntBuildListener.registerAntListener(project);
+//                HybrisAntBuildListener.registerAntListener(project);
             }
         }
     }
